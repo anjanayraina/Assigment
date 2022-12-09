@@ -26,30 +26,39 @@ public class MainClass {
         return res;
     }
 
-    def create_PSSM_matrix(sequences):
-    num_of_seqs = len(sequences)
-    seq_length = len(sequences[0])
-    amino_acids = find_amino_acids(sequences)
-
-    profile = np.zeros((len(amino_acids), seq_length))
-
-            for amino_i in range(len(amino_acids)):
-            for i in range(seq_length):
-    profile[amino_i][i] = find_num_occurences(amino_acids[amino_i], i, sequences)
-
-    profile = profile + PSEUDOCOUNT
-            profile = profile / (num_of_seqs + len(amino_acids) * PSEUDOCOUNT)
-
-    for row_i in range(profile.shape[0]):
-    profile[row_i] = profile[row_i] / (profile[row_i].sum() / seq_length)
-
-    profile = np.log2(profile)
-
-            return profile, amino_acids
+//    def create_PSSM_matrix(sequences):
+//    num_of_seqs = len(sequences)
+//    seq_length = len(sequences[0])
+//    amino_acids = find_amino_acids(sequences)
+//
+//    profile = np.zeros((len(amino_acids), seq_length))
+//
+//            for amino_i in range(len(amino_acids)):
+//            for i in range(seq_length):
+//    profile[amino_i][i] = find_num_occurences(amino_acids[amino_i], i, sequences)
+//
+//    profile = profile + PSEUDOCOUNT
+//            profile = profile / (num_of_seqs + len(amino_acids) * PSEUDOCOUNT)
+//
+//    for row_i in range(profile.shape[0]):
+//    profile[row_i] = profile[row_i] / (profile[row_i].sum() / seq_length)
+//
+//    profile = np.log2(profile)
+//
+//            return profile, amino_acids
 
     public Wrapper create_PSSM_matrix(String sequences[]){
         int num_of_seqs = sequences.length;
         int seq_length = sequences[0].length();
+        char[] amino_acids = find_amino_acids(sequences);
+        int profile[][] = new int[amino_acids.length][seq_length];
+        for(int  amino_i=0;amino_i<amino_acids.length;amino_i++){
+            for(int i=0;i<seq_length;i++){
+                profile[amino_i][i] = find_num_occurences(amino_acids[amino_i] , i , sequences);
+            }
+        }
+
+
 
     }
 }
