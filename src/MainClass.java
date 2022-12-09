@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 
 public class MainClass {
+    int MAX_SEQUENCE_LENGTH = 10;
+   int  PSEUDOCOUNT = 2;
     class Wrapper{
-        String profile;
-        String amino_acids;
-        Wrapper(String profile , String amino_acids){
+        double[][] profile;
+        char[] amino_acids;
+        Wrapper(double[][] profile , char[] amino_acids){
             this.profile = profile;
             this.amino_acids = amino_acids;
         }
@@ -51,12 +53,46 @@ public class MainClass {
         int num_of_seqs = sequences.length;
         int seq_length = sequences[0].length();
         char[] amino_acids = find_amino_acids(sequences);
-        int profile[][] = new int[amino_acids.length][seq_length];
+        double profile[][] = new double[amino_acids.length][seq_length];
         for(int  amino_i=0;amino_i<amino_acids.length;amino_i++){
             for(int i=0;i<seq_length;i++){
                 profile[amino_i][i] = find_num_occurences(amino_acids[amino_i] , i , sequences);
             }
         }
+
+        for(int i=0;i< profile.length;i++){
+            for(int j =0;j<profile[0].length;j++){
+                profile[i][j] +=PSEUDOCOUNT;
+            }
+        }
+
+
+        for(int i=0;i< profile.length;i++){
+            for(int j =0;j<profile[0].length;j++){
+                profile[i][j] =profile[i][j]/(num_of_seqs + amino_acids.length * PSEUDOCOUNT);
+            }
+        }
+
+        for(int row_i=0;row_i<profile[0].length;row_i++){
+            double sum=0;
+            for(int i=0;i<profile[row_i].length;i++){
+                sum+=profile[row_i][i];
+            }
+            for(int i=0;i<profile[row_i].length;i++){
+                profile[row_i][i] = profile[row_i][i] /(sum / seq_length);
+            }
+
+        }
+
+
+        for(int i=0;i< profile.length;i++){
+            for(int j =0;j<profile[0].length;j++){
+                profile[i][j] =Math.log(profile[i][j]);
+            }
+        }
+
+
+        return new Wrapper(profile, amino_acids);
 
 
 
